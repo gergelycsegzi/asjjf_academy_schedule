@@ -6,7 +6,7 @@ import csv
 from datetime import datetime
 
 filename = 'fight_details.csv'
-fieldnames = ['fighter_name', 'mat_number', 'fight_number', 'date', 'time', 'datetime']
+fieldnames = ['fighter_name', 'mat_number', 'fight_number', 'date', 'time', 'datetime', 'bracket_link']
 
 base_url = 'https://asjjf.org'
 event_url = base_url + '/main/schedule/1494'
@@ -69,6 +69,7 @@ def extract_academy_fight_details(url, academy_name):
 
         # If we have extracted all the details add to the list
         if 'fighter_name' in fight and 'fight_number' in fight and 'mat_number' in fight and 'datetime' in fight:
+            fight['bracket_link'] = url
             fights.append(fight)
 
     print(fights)  
