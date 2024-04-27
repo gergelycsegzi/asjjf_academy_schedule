@@ -24,12 +24,8 @@ def parse_html(html):
     return soup
 
 def extract_bracket_links(soup):
-    # Look for all 'a' tags where the href contains 'public/bracketsView'
     bracket_links = [a['href'] for a in soup.find_all('a', href=True) if 'public/bracketsView' in a['href']]
     return bracket_links
-
-from bs4 import BeautifulSoup
-
 
 # Function to parse the HTML and extract relevant details of matches where the fighter belongs to 'Yawara'
 def extract_academy_fight_details(url, academy_name):
@@ -68,7 +64,6 @@ def extract_academy_fight_details(url, academy_name):
         # Combining date and time into a datetime object
         if 'date' in fight and 'time' in fight:
             date_time_str = f"{current_year} {fight['date']} {fight['time']}"
-            # Adjust the format below based on the actual format of 'date' and 'time'
             fight['datetime'] = datetime.strptime(date_time_str, "%Y %d %b %H:%M%p")
         
 
@@ -87,9 +82,7 @@ def main(url):
 
     all_fights = []
     
-    # Print all bracket URLs found
     for link in bracket_links:
-        # go through each link, do the extraction and sleep one second
         barcket_fights = extract_academy_fight_details(base_url + link, academy_of_interest)
         all_fights.extend(barcket_fights)
         time.sleep(1)
@@ -97,12 +90,8 @@ def main(url):
     with open(filename, mode='w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
 
-        # Write the header
         writer.writeheader()
-
-        # Write the rows
         for fight in all_fights:
-            # Convert datetime object to string if necessary
             fight['datetime'] = fight['datetime'].strftime('%Y-%m-%d %H:%M')
             writer.writerow(fight)
 
